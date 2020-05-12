@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script id="fragment_shader" type="x-shader/x-fragment">
+        //获取纹理
+        uniform sampler2D textureD;
+        //需要传递投影相机的视图矩阵和投影矩阵
+        uniform mat4 mviewMatrix;
+        uniform mat4 mprojectionMatrix;
+
+
+        //纹理坐标[0,1]
+        varying vec2 vUv;
+        //世界坐标
+        varying vec3 worldPos;
+
+
+        //射线的两个点以及平面的一个点和法向量,求交点
+        vec3 RayPlaneIntersection(vec3 ray1, vec3 ray2, vec3 planePoint, vec3  planeVec)
+        {
+            vec3 p;
+            float t;
+            t = (dot(planeVec, planePoint) - dot(planeVec, ray1)) / dot(planeVec, ray2);
+            p = ray1 + t*ray2;
+            return p;
+        }
+        //判断是否在投影相机里
+        bool judgeInProjectCamera(vec3 worldPos){
+            vec4 viewPos=mviewMatrix*vec4(worldPos, 1.0);//得到在投影相机中相机坐标
+            vec4 p_pos=mprojectionMatrix*viewPos;//得到在投影相机中的齐次裁剪空间
+            p_pos=p_pos/p_pos.w;
+            if (abs(p_pos.x)>1.0||abs(p_pos.y)>1.0||abs(p_pos.z)>1.0){
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+
+        void main(void){
+
+            vec4 mviewPos=mviewMatrix*vec4(worldPos, 1.0);//得到在投影相机中相机坐标
+            vec4 ngl_pos=mprojectionMatrix*mviewPos;//得到在投影相机中的齐次裁剪空间
+            if (!judgeInProjectCamera(worldPos)){
+                //说明点在视锥体外
+                //discard; //丢弃片元
+                gl_FragColor=vec4(1, 1, 1, 0);
+
+            } else {
+
+                //if(worldPos.y>2.0){discard;return ;}//如果只想图片投射到地板上可以打开这个
+
+
+                mat4 texNormalMatrix=mat4(0.5, 0, 0, 0,    0, -0.5, 0, 0,   0, 0, 0.5, 0,    0.5, 0.5, 0.5, 1.0);
+                
+                vec4 tmp_ndc=ngl_pos/ngl_pos.w;
+                vec4 texViewProjCoordinate=texNormalMatrix*(tmp_ndc);//得到纹理投影坐标
+
+
+                gl_FragColor = texture2D(textureD, texViewProjCoordinate.st);
+
+            }
+
+
+        }
+    </script>
+    <script id="vertex_shader" type="x-shader/x-vertex">
+        varying vec2 vUv;
+        varying vec3 worldPos;//世界坐标
+
+
+        void main()
+        {
+            vUv = uv;
+
+            worldPos=(modelMatrix*vec4(position, 1.0)).xyz;//获得世界坐标
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            //projectionMatrix * mvPosition; 最终得到MVP矩阵
+            gl_Position = projectionMatrix * mvPosition;
+
+        }
+    </script>
+</head>
+
+<body>
+    <br>
+    <br>
+    <br>
+    <button id="playBtn">打开播放器</button>
+    <button id="stopBtn">关闭播放器</button>
+    <br>
+    <canvas id="main-canvas" width="800" height="480" style="background-color: blanchedalmond;"></canvas>
+    <canvas id="webgl-canvas" width="800" height="480" style="background-color: yellowgreen;"></canvas>
+    <script type='text/javascript' src="./common.js"></script>
+    <script type='text/javascript' src="./decoder-wrap.js"></script>
+    <script type='text/javascript' src="./webgl.js"></script>
+    <script type='module' src="./fusion.js"></script>
+</body>
+
+</html>

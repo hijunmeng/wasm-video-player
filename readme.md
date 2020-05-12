@@ -1,0 +1,9 @@
+此项目包含两部分，分别相对独立
+
+ffmpeg目录主要是编译ffmpeg源码为静态库.a,编译后目标码存放在dist-ffmpeg中，此目录下有三个脚本，
+
+第一部分video-player是一个视频播放器，主要演示了如何利用ffmpeg wasm进行解码播放
+
+第二部分fusion-player是一个3维视频融合，结合threejs库，将解码数据制作成纹理喂给threejs,与3维模型呈现出视频融合效果
+
+第三部分ws-fusion-player也是一个3维视频融合，结合threejs库及websocket服务（是另外一个工程），实现从websocket服务获取裸流数据后进行解码，再制作成纹理数据，与3维模型呈现出视频融合效果

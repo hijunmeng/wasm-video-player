@@ -1,0 +1,14 @@
+prefix=/src/ffmpeg/../dist-ffmpeg
+exec_prefix=${prefix}
+libdir=/src/ffmpeg/../dist-ffmpeg/lib
+includedir=/src/ffmpeg/../dist-ffmpeg/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 58.83.100
+Requires: libavutil >= 56.44.100
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavcodec -pthread -lm
+Libs.private: 
+Cflags: -I${includedir}

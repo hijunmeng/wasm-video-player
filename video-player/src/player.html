@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="playBtn">打开播放器1</button>
+    <button id="stopBtn">关闭播放器1</button>
+    <br>
+    <canvas id="playCanvas" width="480" height="320" style="background-color: blueviolet;"></canvas>
+    <br>
+    <button id="playBtn2">打开播放器2</button>
+    <button id="stopBtn2">关闭播放器2</button>
+    <br>
+    <canvas id="playCanvas2" width="480" height="320" style="background-color: yellowgreen;"></canvas>
+
+    <script type='text/javascript' src="common.js"></script>
+    <script type='text/javascript' src="webgl.js"></script>
+    <script type='text/javascript' src="player.js"></script>
+    <script type='text/javascript'>
+
+
+        var player = new Player({ tag: "aaaaa" });
+        document.getElementById("playBtn").addEventListener("click", function () {
+            const canvasId = "playCanvas";
+            var canvas = document.getElementById(canvasId);
+            if (!canvas) {
+                logger.logError("No Canvas with id " + canvasId + "!");
+                return false;
+            }
+            var url;
+            url = "../assets/videos/h265_1080_608.mp4";
+            player.play(url, canvas);
+        });
+        document.getElementById("stopBtn").addEventListener("click", function () {
+            player.stop();
+
+        });
+
+
+
+        var player2 = new Player();
+        document.getElementById("stopBtn2").addEventListener("click", function () {
+            player2.stop();
+        });
+        document.getElementById("playBtn2").addEventListener("click", function () {
+            const canvasId = "playCanvas2";
+            var canvas = document.getElementById(canvasId);
+            if (!canvas) {
+                logger.logError("No Canvas with id " + canvasId + "!");
+                return false;
+            }
+            var url;
+            url = "../assets/videos/h265_852_480.mp4";
+            player2.play(url, canvas);
+        });
+
+    </script>
+</body>
+
+</html>
