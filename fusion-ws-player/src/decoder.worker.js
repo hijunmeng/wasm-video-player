@@ -125,9 +125,9 @@ Decoder.prototype._createDecoder = function () {
 
 //打开解码器
 //codecID:编码id,与ffmpeg的AVCodecID对应
-Decoder.prototype._openDecoder = function (codecID,enableLog) {
+Decoder.prototype._openDecoder = function (codecID,enableLog,expectPixfmt) {
     let handle = this.handle;
-    var ret = Module._openDecoder(handle, codecID, this.videoCallback,enableLog);
+    var ret = Module._openDecoder(handle, codecID, this.videoCallback,enableLog,expectPixfmt);
     this.logger.logInfo("_openDecoder return " + ret);
 
     if (0 == ret && this.cacheBuffer == null) {
