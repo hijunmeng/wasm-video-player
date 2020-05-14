@@ -12,6 +12,8 @@
 
 * fusion-ws-player也是一个3维视频融合，结合threejs库及[流协议解析websocket服务](https://github.com/huweijian5/WebSocketStreamProtocolParseServer) ，实现从websocket服务获取裸流数据后进行解码，再制作成纹理数据，与3维模型呈现出视频融合效果
 
+* 本项目借鉴参考了此项目：https://github.com/sonysuqin/WasmVideoPlayer
+
 ## 开发环境
 * linux
 
