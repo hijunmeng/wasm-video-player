@@ -73,7 +73,7 @@ DecoderWrap.prototype.stop = function () {
     //停止送流后，就去关闭解码器
     if(this.websocket){
         this.websocket.send("{\"request\":\"close_url\",\"serial\":111}");
-        this.websocket.close();
+        
     }
     
 
@@ -170,6 +170,8 @@ DecoderWrap.prototype.initWebsocket = function () {
                     console.log("close_url success");
                 }
                 self.closeDecoder();
+                this.websocket.close();
+
 
             } else if (res.response == "start_take_stream") {
                 if (res.code == 0) {
